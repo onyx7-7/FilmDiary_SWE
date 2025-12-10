@@ -18,7 +18,6 @@ public class User {
     private int age;
     private String gender; // e.g., "Male", "Female"
 
-    // Constructor 1: For creating a new user (without userID)
     public User(String username, String password, String email, int age, String gender) {
         this.username = username;
         this.password = password;
@@ -27,7 +26,6 @@ public class User {
         this.gender = gender;
     }
 
-    // Constructor 2: For retrieving an existing user from the database
     public User(int userID, String username, String password, String email, int age, String gender) {
         this.userID = userID;
         this.username = username;
@@ -53,3 +51,4 @@ public class User {
     public void setAge(int age) { this.age = age; }
     public void setGender(String gender) { this.gender = gender; }
 }
+
