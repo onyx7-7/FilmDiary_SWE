@@ -166,7 +166,7 @@ public class UserDAO {
         return available;
     }
     
-    // Helper method to hash password (simplified - implement proper hashing in production)
+    //hash password
     private static String hashPassword(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -193,3 +193,4 @@ public class UserDAO {
         return inputHash.equals(storedHash);
     }
 }
+
