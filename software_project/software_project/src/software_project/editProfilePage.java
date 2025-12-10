@@ -24,7 +24,7 @@ public class editProfilePage extends javax.swing.JFrame {
     public editProfilePage() {
         initComponents();
         setupMenuListeners();
-        loadCurrentUser(); // Replace 1 with actual logged-in user ID
+        loadCurrentUser();
         loadUserData();
     }
     
@@ -32,8 +32,8 @@ public class editProfilePage extends javax.swing.JFrame {
         initComponents();
         setupMenuListeners();
         this.currentUserId = userId;
-        loadCurrentUser();  // Load the current user with specified ID
-        loadUserData();     // Load data into UI
+        loadCurrentUser();  
+        loadUserData();     
     }
     private void loadCurrentUser() {
         currentUser = UserDAO.getUserById(currentUserId);
