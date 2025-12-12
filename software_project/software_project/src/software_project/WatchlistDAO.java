@@ -20,7 +20,11 @@ public class WatchlistDAO {
             return true;
 
         } catch (SQLException e) {
-            System.out.println("Error adding to watchlist: " + e.getMessage());
+            // 23xxx = constraint violation (duplicate key)
+            if (e.getSQLState() != null && e.getSQLState().startsWith("23")) {
+                return false; // already in watchlist
+            }
+            e.printStackTrace();
             return false;
         }
     }
