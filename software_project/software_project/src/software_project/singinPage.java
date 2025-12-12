@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
  * @author wjd12
  */
 public class singinPage extends javax.swing.JFrame {
+    private DatabaseHandler dbHandler = new DatabaseHandler();
 
     /**
      * Creates new form singinPage
@@ -18,45 +19,46 @@ public class singinPage extends javax.swing.JFrame {
     public singinPage() {
         initComponents();
         setupMenuListeners();  // Add this line
-
     }
-private void setupMenuListeners() {
-    // Home menu item
-    jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            homePage hp = new homePage();
-            hp.setVisible(true);
-            dispose();
-        }
-    });
-    
-    // Profile menu item
-    jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            editProfilePage epp = new editProfilePage();
-            epp.setVisible(true);
-            dispose();
-        }
-    });
-    
-    // My List menu item
-    jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            myListPage mlp = new myListPage();
-            mlp.setVisible(true);
-            dispose();
-        }
-    });
-    
-    // About Us menu item
-    jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
-        public void mouseClicked(java.awt.event.MouseEvent evt) {
-            aboutUsPage aup = new aboutUsPage();
-            aup.setVisible(true);
-            dispose();
-        }
-    });
-}
+
+    private void setupMenuListeners() {
+        // Home menu item
+        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                homePage hp = new homePage();
+                hp.setVisible(true);
+                dispose();
+            }
+        });
+
+        // Profile menu item
+        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                editProfilePage epp = new editProfilePage();
+                epp.setVisible(true);
+                dispose();
+            }
+        });
+
+        // My List menu item
+        jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                myListPage mlp = new myListPage();
+                mlp.setVisible(true);
+                dispose();
+            }
+        });
+
+        // About Us menu item
+        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                aboutUsPage aup = new aboutUsPage();
+                aup.setVisible(true);
+                dispose();
+            }
+        });
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -196,28 +198,61 @@ private void setupMenuListeners() {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    String username = jTextField1.getText();
-    String email = jTextField2.getText();
-    String age = jTextField3.getText();
-    String password = new String(jPasswordField2.getPassword());
-    String confirmPass = new String(jPasswordField1.getPassword());
-    
-    // Validation
-    if (username.isEmpty() || email.isEmpty() || age.isEmpty() || password.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please fill all fields!");
-        return;
-    }
-    
-    if (!password.equals(confirmPass)) {
-        JOptionPane.showMessageDialog(this, "Passwords do not match!");
-        return;
-    }
-    
-    JOptionPane.showMessageDialog(this, "Account created successfully!");
-    homePage hp = new homePage();
-    hp.setVisible(true);
-    this.dispose();
-        // TODO add your handling code here:
+        // Get input values
+        String username = jTextField1.getText();
+        String ageText = jTextField3.getText();  // ← FIXED: Renamed to ageText
+        String email = jTextField2.getText();
+        String password = new String(jPasswordField2.getPassword());
+        String confirmPass = new String(jPasswordField1.getPassword());
+
+        // Get gender selection
+        String gender = "";
+        if (jRadioButton1.isSelected()) {
+            gender = "Male";
+        } else if (jRadioButton2.isSelected()) {
+            gender = "Female";
+        }
+
+        // Validation - check ALL fields including gender
+        if (username.isEmpty() || ageText.isEmpty() || email.isEmpty() ||
+                password.isEmpty() || gender.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields!",
+                    "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Check password match BEFORE trying to register
+        if (!password.equals(confirmPass)) {
+            JOptionPane.showMessageDialog(this, "Passwords do not match!",
+                    "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validate and parse age
+        int age;
+        try {
+            age = Integer.parseInt(ageText);  // ← FIXED: Now uses ageText
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid age.",
+                    "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Register user in database
+        if (dbHandler.registerUser(username, password, age, email, gender)) {
+            JOptionPane.showMessageDialog(this,
+                    "Registration successful! You can now log in.",
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            // Navigate to login page after successful registration
+            new loginPage().setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Registration failed. Username might already exist or a database error occurred.",
+                    "Registration Error", JOptionPane.ERROR_MESSAGE);
+        }
+        // ← REMOVED: All the old unreachable code
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -227,7 +262,7 @@ private void setupMenuListeners() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

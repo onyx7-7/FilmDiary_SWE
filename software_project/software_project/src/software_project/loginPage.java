@@ -6,11 +6,12 @@ package software_project;
 
 import javax.swing.JOptionPane;
 
+
 /**
  *
  * @author wjd12
  */
-public class loginPage extends javax.swing.JFrame {
+public class  loginPage extends javax.swing.JFrame {
 
     /**
      * Creates new form loginPage
@@ -161,21 +162,31 @@ private void setupMenuListeners() {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    String username = jTextField1.getText();
-    String password = new String(jPasswordField1.getPassword());
-    
-    // Basic validation
-    if (username.isEmpty() || password.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please enter username and password!");
-        return;
+        String username = jTextField1.getText();
+        String password = new String(jPasswordField1.getPassword());
+
+        // Basic validation
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter username and password!");
+            return;
+        }
+
+        // Use DatabaseHandler to check login
+        DatabaseHandler db = new DatabaseHandler();
+
+        boolean isValid = db.checkLogin(username, password);
+
+        if (isValid) {
+            JOptionPane.showMessageDialog(this, "Login Successful!");
+            homePage hp = new homePage();
+            hp.setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Invalid username or password!");
+        }
     }
-    
-    // Navigate to home page
-    homePage hp = new homePage();
-    hp.setVisible(true);
-    this.dispose();
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    //GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
