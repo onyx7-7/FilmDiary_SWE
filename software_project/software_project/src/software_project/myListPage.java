@@ -83,7 +83,7 @@ public class myListPage extends javax.swing.JFrame {
         moviePanel.setLayout(new BoxLayout(moviePanel, BoxLayout.Y_AXIS));
         moviePanel.setAlignmentY(Component.TOP_ALIGNMENT);
 
-
+        System.out.println("Logged user ID: " + user.getUserID());
         java.util.List<Movie> movies =
                 WatchlistDAO.getUserWatchlist(user.getUserID());
 

@@ -9,7 +9,7 @@ public class WatchlistDAO {
     // 🔹 Add movie to user's watchlist
     public static boolean addToWatchlist(int userId, int movieId) {
 
-        String sql = "INSERT INTO watchlist (user_id, movie_id) VALUES (?, ?)";
+        String sql = "INSERT INTO watchlist (userID, mediaID) VALUES (?, ?)\n";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -35,6 +35,7 @@ public class WatchlistDAO {
             FROM watchlist w
             JOIN movies m ON w.mediaID = m.movie_id
             WHERE w.userID = ?
+
         """;
 
         try (Connection conn = DBConnection.getConnection();
