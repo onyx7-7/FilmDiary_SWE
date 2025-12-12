@@ -33,8 +33,8 @@ public class WatchlistDAO {
         String sql = """
             SELECT m.movie_id, m.title, m.overview, m.poster_url, m.release_year
             FROM watchlist w
-            JOIN movies m ON w.movie_id = m.movie_id
-            WHERE w.user_id = ?
+            JOIN movies m ON w.mediaID = m.movie_id
+            WHERE w.userID = ?
         """;
 
         try (Connection conn = DBConnection.getConnection();
