@@ -16,8 +16,6 @@ import java.util.List;
  * @author wjd12
  */
 public class homePage extends javax.swing.JFrame {
-
-    private List<Movie> exploreMovies;
     private Movie selectedMovie;
 
 
