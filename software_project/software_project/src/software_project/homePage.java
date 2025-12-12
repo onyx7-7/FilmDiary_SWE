@@ -5,6 +5,11 @@
 package software_project;
 
 import javax.swing.JOptionPane;
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+
+
 
 /**
  *
@@ -12,11 +17,14 @@ import javax.swing.JOptionPane;
  */
 public class homePage extends javax.swing.JFrame {
 
+    private List<Movie> exploreMovies;
+    private Movie selectedMovie;
+
+
     /**
      * Creates new form homePage
      */
     public homePage() {
-        initComponents();
         User currentUser = Session.getCurrentUser();
         if (currentUser == null) {
             JOptionPane.showMessageDialog(this, "Please log in first.");
@@ -25,10 +33,11 @@ public class homePage extends javax.swing.JFrame {
             return;
         }
         initComponents();
-        setupMenuListeners();  // Add this line
+        setupMenuListeners();
+        loadPopularMovies();
 
     }
-    
+
     private void setupMenuListeners() {
     // Home menu item
     jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -38,7 +47,7 @@ public class homePage extends javax.swing.JFrame {
             dispose();
         }
     });
-    
+
     // Profile menu item
     jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -47,7 +56,7 @@ public class homePage extends javax.swing.JFrame {
             dispose();
         }
     });
-    
+
     // My List menu item
     jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -56,7 +65,7 @@ public class homePage extends javax.swing.JFrame {
             dispose();
         }
     });
-    
+
     // About Us menu item
     jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
         public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -66,6 +75,33 @@ public class homePage extends javax.swing.JFrame {
         }
     });
 }
+    private void loadPopularMovies() {
+        JPanel moviePanel = new JPanel();
+        moviePanel.setLayout(new GridLayout(0, 4, 10, 10));
+        moviePanel.setBackground(new Color(0, 0, 0, 0));
+
+        for (Movie movie : MovieApiService.fetchPopularMovies()) {
+            MovieCard card = new MovieCard(movie);
+
+            card.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    selectedMovie = movie;
+                    JOptionPane.showMessageDialog(
+                            homePage.this,
+                            "Selected: " + movie.getTitle()
+                    );
+                }
+            });
+
+            moviePanel.add(card);
+        }
+
+        jScrollPane1.setViewportView(moviePanel);
+        jScrollPane1.revalidate();
+        jScrollPane1.repaint();
+
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -108,8 +144,13 @@ public class homePage extends javax.swing.JFrame {
         jButton2.setText("details");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
+                if (selectedMovie == null) {
+                    JOptionPane.showMessageDialog(this, "Please select a movie first.");
+                    return;
+                }
+
+                new detailsPage(selectedMovie).setVisible(true);
+                dispose();            }
         });
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 390, 90, 40));
 
@@ -176,8 +217,6 @@ public class homePage extends javax.swing.JFrame {
                 .addContainerGap(366, Short.MAX_VALUE))
         );
 
-        jScrollPane1.setViewportView(jPanel1);
-
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, 310, 190));
 
         jLabel5.setFont(new java.awt.Font("STLiti", 1, 24)); // NOI18N
@@ -227,17 +266,6 @@ public class homePage extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        detailsPage dp = new detailsPage();
-        if (Session.getCurrentUser() == null) {
-            JOptionPane.showMessageDialog(this, "Please log in first.");
-            return;
-        }
-
-        new detailsPage().setVisible(true);
-        dispose();
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         User user = Session.getCurrentUser();
@@ -271,7 +299,7 @@ public class homePage extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
