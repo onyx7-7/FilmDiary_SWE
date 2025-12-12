@@ -63,19 +63,55 @@ public class myListPage extends javax.swing.JFrame {
 
     /** Inserts your teammate’s dynamic panel into the scrollpane */
     private void setupDynamicMovieList() {
+//
+//        JPanel moviePanel = new JPanel();
+//        moviePanel.setLayout(new BoxLayout(moviePanel, BoxLayout.Y_AXIS));
+//
+//        moviePanel.add(new JLabel(new ImageIcon(getClass().getResource("/software_project/movie (1).png"))));
+//        moviePanel.add(Box.createVerticalStrut(10));
+//
+//        moviePanel.add(new JLabel(new ImageIcon(getClass().getResource("/software_project/movie (3).png"))));
+//        moviePanel.add(Box.createVerticalStrut(10));
+//
+//        moviePanel.add(new JLabel(new ImageIcon(getClass().getResource("/software_project/movie (4).png"))));
+//
+//        jScrollPane2.setViewportView(moviePanel);
+        User user = Session.getCurrentUser();
+        if (user == null) return;
 
         JPanel moviePanel = new JPanel();
         moviePanel.setLayout(new BoxLayout(moviePanel, BoxLayout.Y_AXIS));
 
-        moviePanel.add(new JLabel(new ImageIcon(getClass().getResource("/software_project/movie (1).png"))));
-        moviePanel.add(Box.createVerticalStrut(10));
+        java.util.List<Movie> movies =
+                WatchlistDAO.getUserWatchlist(user.getUserID());
 
-        moviePanel.add(new JLabel(new ImageIcon(getClass().getResource("/software_project/movie (3).png"))));
-        moviePanel.add(Box.createVerticalStrut(10));
+        if (movies.isEmpty()) {
+            moviePanel.add(new JLabel("Your list is empty."));
+        }
 
-        moviePanel.add(new JLabel(new ImageIcon(getClass().getResource("/software_project/movie (4).png"))));
+        for (Movie movie : movies) {
+
+            JPanel row = new JPanel(new BorderLayout());
+            row.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+            JLabel title = new JLabel(movie.getTitle());
+            title.setFont(new Font("Segoe UI", Font.BOLD, 16));
+
+            JButton viewBtn = new JButton("View");
+            viewBtn.addActionListener(e -> {
+                new detailsPage(movie).setVisible(true);
+                dispose();
+            });
+
+            row.add(title, BorderLayout.CENTER);
+            row.add(viewBtn, BorderLayout.EAST);
+
+            moviePanel.add(row);
+        }
 
         jScrollPane2.setViewportView(moviePanel);
+        jScrollPane2.revalidate();
+        jScrollPane2.repaint();
     }
 
     @SuppressWarnings("unchecked")

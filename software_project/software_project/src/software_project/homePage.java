@@ -267,16 +267,28 @@ public class homePage extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         User user = Session.getCurrentUser();
+
         if (user == null) {
             JOptionPane.showMessageDialog(this, "You must be logged in.");
             return;
         }
 
-        JOptionPane.showMessageDialog(this,
-                "Item added to " + user.getUsername() + "'s list!");
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        if (selectedMovie == null) {
+            JOptionPane.showMessageDialog(this, "Select a movie first.");
+            return;
+        }
 
+        boolean success = WatchlistDAO.addToWatchlist(
+                user.getUserID(),
+                selectedMovie.getMovieId()
+        );
+
+        if (success) {
+            JOptionPane.showMessageDialog(this, "Added to My List!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Already in your list or error.");
+        }//GEN-LAST:event_jButton1ActionPerformed
+    }
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         myListPage mlp = new myListPage();
         mlp.setVisible(true);
