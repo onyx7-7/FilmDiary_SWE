@@ -21,6 +21,10 @@ public class Movie {
         this.posterUrl = posterUrl;
         this.releaseYear = releaseYear;
     }
+    public int getId() {
+        return movieId;
+    }
+
 
     public int getMovieId() { return movieId; }
     public String getTitle() { return title; }

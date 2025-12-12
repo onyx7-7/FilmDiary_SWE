@@ -81,6 +81,8 @@ public class myListPage extends javax.swing.JFrame {
 
         JPanel moviePanel = new JPanel();
         moviePanel.setLayout(new BoxLayout(moviePanel, BoxLayout.Y_AXIS));
+        moviePanel.setAlignmentY(Component.TOP_ALIGNMENT);
+
 
         java.util.List<Movie> movies =
                 WatchlistDAO.getUserWatchlist(user.getUserID());
@@ -118,7 +120,6 @@ public class myListPage extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane2 = new javax.swing.JScrollPane();
-        jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
@@ -133,12 +134,6 @@ public class myListPage extends javax.swing.JFrame {
 
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 120, 300, 260));
 
-        jButton1.setText("view");
-        jButton1.addActionListener(evt -> {
-            new detailsPage().setVisible(true);
-            dispose();
-        });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 410, 120, 30));
 
         jButton2.setText("delete");
         jButton2.addActionListener(evt -> {
@@ -185,7 +180,6 @@ public class myListPage extends javax.swing.JFrame {
     }
 
     // Variables declaration
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
