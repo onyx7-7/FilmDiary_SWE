@@ -1,4 +1,5 @@
 🎬 FilmDiary
+
 Film Diary (Movie Tracker) is a desktop-based application that helps users organize and manage their personal movie lists and ratings. Users can track movies they plan to watch as well as movies they have already watched, making movie management simple and efficient without relying on memory.
 
 The application is built using Java with a graphical user interface and uses MySQL for secure data storage. It integrates the TMDb (The Movie Database) API to fetch accurate and up-to-date movie information such as titles, descriptions, and images, providing a smooth and user-friendly experience.
