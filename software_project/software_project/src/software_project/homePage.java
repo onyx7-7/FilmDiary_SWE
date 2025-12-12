@@ -145,7 +145,7 @@ public class homePage extends javax.swing.JFrame {
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 if (selectedMovie == null) {
-                    JOptionPane.showMessageDialog(this, "Please select a movie first.");
+                    JOptionPane.showMessageDialog(homePage.this, "Please select a movie first.");
                     return;
                 }
 
