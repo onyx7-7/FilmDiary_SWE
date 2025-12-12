@@ -18,6 +18,7 @@ public class  loginPage extends javax.swing.JFrame {
      */
     public loginPage() {
         initComponents();
+        setupMenuListeners();
 
     }
 private void setupMenuListeners() {
@@ -172,18 +173,17 @@ private void setupMenuListeners() {
         }
 
         // Use DatabaseHandler to check login
-        DatabaseHandler db = new DatabaseHandler();
+        User user = UserDAO.login(username, password);
 
-        boolean isValid = db.checkLogin(username, password);
-
-        if (isValid) {
+        if (user != null) {
+            Session.setCurrentUser(user);   // 🔴 THIS IS CRITICAL
             JOptionPane.showMessageDialog(this, "Login Successful!");
-            homePage hp = new homePage();
-            hp.setVisible(true);
-            this.dispose();
+            new homePage().setVisible(true);
+            dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Invalid username or password!");
         }
+
     }
         // TODO add your handling code here:
     //GEN-LAST:event_jButton1ActionPerformed

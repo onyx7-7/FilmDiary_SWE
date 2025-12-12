@@ -17,6 +17,14 @@ public class homePage extends javax.swing.JFrame {
      */
     public homePage() {
         initComponents();
+        User currentUser = Session.getCurrentUser();
+        if (currentUser == null) {
+            JOptionPane.showMessageDialog(this, "Please log in first.");
+            new loginPage().setVisible(true);
+            dispose();
+            return;
+        }
+        initComponents();
         setupMenuListeners();  // Add this line
 
     }
@@ -221,14 +229,25 @@ public class homePage extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         detailsPage dp = new detailsPage();
-        dp.setVisible(true);
+        if (Session.getCurrentUser() == null) {
+            JOptionPane.showMessageDialog(this, "Please log in first.");
+            return;
+        }
+
+        new detailsPage().setVisible(true);
         dispose();
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        JOptionPane.showMessageDialog(null, "Added to your list!");
+        User user = Session.getCurrentUser();
+        if (user == null) {
+            JOptionPane.showMessageDialog(this, "You must be logged in.");
+            return;
+        }
 
+        JOptionPane.showMessageDialog(this,
+                "Item added to " + user.getUsername() + "'s list!");
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 

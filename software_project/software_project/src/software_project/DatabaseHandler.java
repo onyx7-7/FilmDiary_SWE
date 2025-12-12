@@ -8,9 +8,9 @@ import java.sql.SQLException;
 
 public class DatabaseHandler {
 
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/your_database_name";
-    private static final String DB_USER = "your_db_username";
-    private static final String DB_PASS = "your_db_password";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/movie";
+    private static final String DB_USER = "root";
+    private static final String DB_PASS = "onyx0500";
 
     static {
         try {

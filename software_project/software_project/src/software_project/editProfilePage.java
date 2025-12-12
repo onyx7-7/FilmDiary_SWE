@@ -17,32 +17,27 @@ import java.util.logging.Logger;
  */
 public class editProfilePage extends javax.swing.JFrame {
     private User currentUser;
-    private int currentUserId = 1;
+
     /**
      * Creates new form editProfilePage
      */
     public editProfilePage() {
+
+        currentUser = Session.getCurrentUser();
+        if (currentUser == null) {
+            JOptionPane.showMessageDialog(null, "Please log in first.");
+            new loginPage().setVisible(true);
+            dispose();
+            return;
+        }
+
         initComponents();
         setupMenuListeners();
-        loadCurrentUser();
         loadUserData();
     }
-    
-    public editProfilePage(int userId) {
-        initComponents();
-        setupMenuListeners();
-        this.currentUserId = userId;
-        loadCurrentUser();  
-        loadUserData();     
-    }
-    private void loadCurrentUser() {
-        currentUser = UserDAO.getUserById(currentUserId);
-        if (currentUser == null) {
-            JOptionPane.showMessageDialog(this, "User not found! Using demo data.");
-            // Create a demo user for testing
-            currentUser = new User(1, "User111", "password123", "user111@gmail.com", 23, "Female");
-        }
-    }
+
+
+
    private void loadUserData() {
         if (currentUser != null) {
             jTextField1.setText(currentUser.getUsername());
@@ -74,13 +69,13 @@ public class editProfilePage extends javax.swing.JFrame {
         });
     
     // Profile menu item
-    jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                editProfilePage epp = new editProfilePage(currentUserId);
-                epp.setVisible(true);
+                new editProfilePage().setVisible(true);
                 dispose();
             }
         });
+
     
     // My List menu item
     jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -382,35 +377,9 @@ public class editProfilePage extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(editProfilePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(editProfilePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(editProfilePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(editProfilePage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new editProfilePage().setVisible(true);
-            }
-        });
+        JOptionPane.showMessageDialog(null,
+                "Do not run editProfilePage directly.\nPlease start from login page.");
+        new loginPage().setVisible(true);
     }
 
     // Variables declaration - do not modify                     

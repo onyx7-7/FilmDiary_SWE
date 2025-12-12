@@ -21,7 +21,7 @@ public class DatabaseConnection {
     
     private static final String URL = "jdbc:mysql://localhost:3306/movie?allowPublicKeyRetrieval=true&useSSL=false";
     private static final String USER = "root"; // 
-    private static final String PASSWORD = "ww08642A"; //
+    private static final String PASSWORD = "onyx0500"; //ww08642A
     private static Connection connection = null;
     
     public static Connection getConnection() {

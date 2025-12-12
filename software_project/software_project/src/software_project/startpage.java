@@ -17,9 +17,6 @@ public class startpage extends javax.swing.JFrame {
         initComponents();
         setupMenuListeners();  // Add this line
 
-        loginPage lp = new loginPage();
-        lp.setVisible(true);
-        dispose();
     }
 private void setupMenuListeners() {
     // Home menu item

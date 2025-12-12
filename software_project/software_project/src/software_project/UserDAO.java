@@ -24,14 +24,14 @@ public class UserDAO {
         Connection conn = DatabaseConnection.getConnection();
         
         if (conn != null) {
-            String sql = "SELECT * FROM users WHERE user_id = ?";
+            String sql = "SELECT * FROM users WHERE userID = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setInt(1, userId);
                 ResultSet rs = pstmt.executeQuery();
                 
                 if (rs.next()) {
                     user = new User(
-                        rs.getInt("user_id"),
+                        rs.getInt("userID"),
                         rs.getString("username"),
                         rs.getString("password"),
                         rs.getString("email"),
@@ -53,7 +53,7 @@ public class UserDAO {
         boolean success = false;
         
         if (conn != null) {
-            String sql = "UPDATE users SET username = ?, email = ?, age = ?, gender = ? WHERE user_id = ?";
+            String sql = "UPDATE users SET username = ?, email = ?, age = ?, gender = ? WHERE userID = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, user.getUsername());
                 pstmt.setString(2, user.getEmail());
@@ -84,7 +84,7 @@ public class UserDAO {
         boolean success = false;
         
         if (conn != null) {
-            String verifySql = "SELECT password FROM users WHERE user_id = ?";
+            String verifySql = "SELECT password FROM users WHERE userID = ?";
             try (PreparedStatement verifyStmt = conn.prepareStatement(verifySql)) {
                 verifyStmt.setInt(1, userId);
                 ResultSet rs = verifyStmt.executeQuery();
@@ -92,9 +92,9 @@ public class UserDAO {
                 if (rs.next()) {
                     String storedHash = rs.getString("password");
                     String currentPasswordHash = hashPassword(currentPassword);
-                    
-                    if (storedHash.equals(currentPasswordHash)) {
-                        String updateSql = "UPDATE users SET password = ? WHERE user_id = ?";
+
+                    if (storedHash.equals(currentPassword) || storedHash.equals(currentPasswordHash)) {
+                        String updateSql = "UPDATE users SET password = ? WHERE userID = ?";
                         try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
                             String newPasswordHash = hashPassword(newPassword);
                             updateStmt.setString(1, newPasswordHash);
@@ -124,7 +124,7 @@ public class UserDAO {
         boolean available = true;
         
         if (conn != null) {
-            String sql = "SELECT COUNT(*) FROM users WHERE username = ? AND user_id != ?";
+            String sql = "SELECT COUNT(*) FROM users WHERE username = ? AND userID != ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, username);
                 pstmt.setInt(2, currentUserId);
@@ -148,7 +148,7 @@ public class UserDAO {
         boolean available = true;
         
         if (conn != null) {
-            String sql = "SELECT COUNT(*) FROM users WHERE email = ? AND user_id != ?";
+            String sql = "SELECT COUNT(*) FROM users WHERE email = ? AND userID != ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, email);
                 pstmt.setInt(2, currentUserId);
@@ -192,5 +192,40 @@ public class UserDAO {
         String inputHash = hashPassword(inputPassword);
         return inputHash.equals(storedHash);
     }
+
+    public static User login(String username, String password) {
+        String sql = "SELECT * FROM users WHERE username = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                String storedPassword = rs.getString("password");
+
+                // support plain + hashed passwords
+                if (storedPassword.equals(password) ||
+                        storedPassword.equals(hashPassword(password))) {
+
+                    return new User(
+                            rs.getInt("userID"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getString("email"),
+                            rs.getInt("age"),
+                            rs.getString("gender")
+                    );
+                }
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        return null;
+    }
+
 }
 
