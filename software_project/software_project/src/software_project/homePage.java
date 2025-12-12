@@ -265,9 +265,9 @@ public class homePage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        User user = Session.getCurrentUser();
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
 
+        User user = Session.getCurrentUser();
         if (user == null) {
             JOptionPane.showMessageDialog(this, "You must be logged in.");
             return;
@@ -278,17 +278,26 @@ public class homePage extends javax.swing.JFrame {
             return;
         }
 
+        // 🔹 make sure movie exists in DB
+        int movieId = WatchlistDAO.ensureMovieExists(selectedMovie);
+
+        if (movieId == -1) {
+            JOptionPane.showMessageDialog(this, "Error saving movie.");
+            return;
+        }
+
         boolean success = WatchlistDAO.addToWatchlist(
                 user.getUserID(),
-                selectedMovie.getMovieId()
+                movieId
         );
 
         if (success) {
             JOptionPane.showMessageDialog(this, "Added to My List!");
         } else {
-            JOptionPane.showMessageDialog(this, "Already in your list or error.");
-        }//GEN-LAST:event_jButton1ActionPerformed
+            JOptionPane.showMessageDialog(this, "Already in list or error.");
+        }
     }
+
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         myListPage mlp = new myListPage();
         mlp.setVisible(true);
