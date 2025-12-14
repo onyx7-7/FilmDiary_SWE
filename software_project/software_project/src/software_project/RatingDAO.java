@@ -7,7 +7,7 @@ public class RatingDAO {
     public static void saveRating(int userId, int movieId, int rating) {
 
         String sql = """
-            INSERT INTO rating (user_id, movie_id, rating)
+            INSERT INTO ratings (user_id, movie_id, rating)
             VALUES (?, ?, ?)
             ON DUPLICATE KEY UPDATE rating = VALUES(rating)
         """;

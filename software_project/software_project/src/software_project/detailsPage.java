@@ -156,46 +156,56 @@ public class detailsPage extends javax.swing.JFrame {
 
     private void rateMovie() {
 
-            User user = Session.getCurrentUser();
-            if (user == null) {
-                JOptionPane.showMessageDialog(this, "Please log in first.");
-                return;
-            }
-
-            if (!WatchlistDAO.isMovieInWatchlist(user.getUserID(), movie.getMovieId())) {
-                JOptionPane.showMessageDialog(this,
-                        "You must add this movie to your list before rating it.");
-                return;
-            }
-
-            String input = JOptionPane.showInputDialog(
-                    this,
-                    "Enter rating (0–10):",
-                    "Rate Movie",
-                    JOptionPane.QUESTION_MESSAGE
-            );
-
-            if (input != null) {
-                try {
-                    int rating = Integer.parseInt(input);
-                    if (rating < 0 || rating > 10) {
-                        JOptionPane.showMessageDialog(this, "Rating must be 0–10");
-                        return;
-                    }
-
-                    RatingDAO.saveRating(
-                            user.getUserID(),
-                            movie.getMovieId(),
-                            rating
-                    );
-
-                    JOptionPane.showMessageDialog(this, "Rating saved!");
-
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Invalid number");
-                }
-            }
+        User user = Session.getCurrentUser();
+        if (user == null) {
+            JOptionPane.showMessageDialog(this, "Please log in first.");
+            return;
         }
+
+        // 🔹 Always get DB movie ID
+        int dbMovieId = WatchlistDAO.ensureMovieExists(movie);
+
+        if (dbMovieId == -1) {
+            JOptionPane.showMessageDialog(this, "Movie not found in database.");
+            return;
+        }
+
+        // 🔹 Prevent rating if not in watchlist
+        if (!WatchlistDAO.isMovieInWatchlist(user.getUserID(), dbMovieId)) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "You must add this movie to your list before rating it."
+            );
+            return;
+        }
+
+        String input = JOptionPane.showInputDialog(
+                this,
+                "Enter rating (0–10):",
+                "Rate Movie",
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (input == null) return;
+
+        try {
+            int rating = Integer.parseInt(input);
+
+            if (rating < 0 || rating > 10) {
+                JOptionPane.showMessageDialog(this, "Rating must be between 0 and 10.");
+                return;
+            }
+
+            RatingDAO.saveRating(user.getUserID(), dbMovieId, rating);
+
+            JOptionPane.showMessageDialog(this, "Rating saved successfully!");
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid number.");
+        }
+    }
+
+
 
 
 

@@ -108,5 +108,22 @@ public class WatchlistDAO {
             return false;
         }
     }
+    public static boolean removeFromWatchlist(int userId, int movieId) {
+        String sql = "DELETE FROM watchlist WHERE userID = ? AND mediaID = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ps.setInt(2, movieId);
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 }
+
