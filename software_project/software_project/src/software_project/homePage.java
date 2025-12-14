@@ -290,6 +290,26 @@ public class homePage extends javax.swing.JFrame {
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 130, -1, -1));
 
         jTextField1.setText("Search for a movie or series...");
+        jTextField1.setForeground(Color.GRAY);
+
+        jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent e) {
+                if (jTextField1.getText().equals("Search for a movie or series...")) {
+                    jTextField1.setText("");
+                    jTextField1.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent e) {
+                if (jTextField1.getText().isEmpty()) {
+                    jTextField1.setText("Search for a movie or series...");
+                    jTextField1.setForeground(Color.GRAY);
+                }
+            }
+        });
+
         getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, 230, -1));
 
         jButton3.setBackground(new java.awt.Color(204, 204, 204));
@@ -363,6 +383,10 @@ public class homePage extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Already in list or error.");
         }
+    }
+    private void openMyList() {
+        new myListPage().setVisible(true);
+        dispose();
     }
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
