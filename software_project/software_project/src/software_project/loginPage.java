@@ -97,7 +97,13 @@ private void setupMenuListeners() {
 
         jButton2.setFont(new java.awt.Font("Tw Cen MT", 3, 24)); // NOI18N
         jButton2.setText("sign in ");
+        jButton2.addActionListener(e -> {
+            new singinPage().setVisible(true);
+            dispose();
+        });
+
         loginPage.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 430, 100, 30));
+
 
         jLabel4.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(204, 204, 204));
