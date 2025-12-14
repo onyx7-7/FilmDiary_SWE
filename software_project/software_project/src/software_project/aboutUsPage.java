@@ -14,7 +14,11 @@ public class aboutUsPage extends javax.swing.JFrame {
      * Creates new form aboutUsPage
      */
     public aboutUsPage() {
+
         initComponents();
+        setupMenuListeners();
+
+
     }
 
     /**
@@ -64,6 +68,39 @@ public class aboutUsPage extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    private void setupMenuListeners() {
+
+        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                new homePage().setVisible(true);
+                dispose();
+            }
+        });
+
+        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                new editProfilePage().setVisible(true);
+                dispose();
+            }
+        });
+
+        jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                new myListPage().setVisible(true);
+                dispose();
+            }
+        });
+
+        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                // already on About Us
+            }
+        });
+    }
 
     /**
      * @param args the command line arguments

@@ -38,11 +38,13 @@ public class detailsPage extends javax.swing.JFrame {
             if (movie.getPosterUrl() != null && !movie.getPosterUrl().isEmpty()) {
                 ImageIcon icon = new ImageIcon(new URL(movie.getPosterUrl()));
                 Image scaled = icon.getImage().getScaledInstance(
-                        jLabelPoster.getWidth(),
-                        jLabelPoster.getHeight(),
+                        200,   // same width as label
+                        280,   // same height as label
                         Image.SCALE_SMOOTH
                 );
                 jLabelPoster.setIcon(new ImageIcon(scaled));
+                jLabelPoster.setText(""); // remove "No Image"
+
             }
         } catch (Exception e) {
             jLabelPoster.setText("No Image");

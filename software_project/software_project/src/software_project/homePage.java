@@ -33,6 +33,7 @@ public class homePage extends javax.swing.JFrame {
         initComponents();
         setupMenuListeners();
         loadPopularMovies();
+        loadMyListPreview();
 
     }
 
@@ -98,6 +99,49 @@ public class homePage extends javax.swing.JFrame {
         jScrollPane1.revalidate();
         jScrollPane1.repaint();
 
+    }
+    private void loadMyListPreview() {
+        User user = Session.getCurrentUser();
+        if (user == null) return;
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        List<Movie> movies = WatchlistDAO.getUserWatchlist(user.getUserID());
+
+        if (movies.isEmpty()) {
+            panel.add(new JLabel("Your list is empty."));
+        }
+
+        for (Movie movie : movies) {
+
+            JPanel row = new JPanel(new BorderLayout(10, 10));
+            row.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+            // Poster
+            JLabel posterLabel = new JLabel();
+            try {
+                ImageIcon icon = new ImageIcon(new java.net.URL(movie.getPosterUrl()));
+                Image img = icon.getImage().getScaledInstance(80, 120, Image.SCALE_SMOOTH);
+                posterLabel.setIcon(new ImageIcon(img));
+            } catch (Exception e) {
+                posterLabel.setText("No Image");
+            }
+
+            // Title
+            JLabel title = new JLabel(movie.getTitle());
+            title.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+            row.add(posterLabel, BorderLayout.WEST);
+            row.add(title, BorderLayout.CENTER);
+
+            panel.add(row);
+        }
+
+
+        jScrollPane2.setViewportView(panel);
+        jScrollPane2.revalidate();
+        jScrollPane2.repaint();
     }
 
 
@@ -177,7 +221,7 @@ public class homePage extends javax.swing.JFrame {
                 .addContainerGap(141, Short.MAX_VALUE))
         );
 
-        jScrollPane2.setViewportView(jPanel2);
+//        jScrollPane2.setViewportView(jPanel2);
 
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 170, 280, 190));
 
