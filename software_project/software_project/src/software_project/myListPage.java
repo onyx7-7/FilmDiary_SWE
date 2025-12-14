@@ -5,6 +5,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class myListPage extends javax.swing.JFrame {
+    private Movie selectedMovie;
+
 
     public myListPage() {
         User currentUser = Session.getCurrentUser();
@@ -58,10 +60,11 @@ public class myListPage extends javax.swing.JFrame {
                 dispose();
             }
         });
+
+
     }
 
 
-    /** Inserts your teammate’s dynamic panel into the scrollpane */
     private void setupDynamicMovieList() {
 
         User user = Session.getCurrentUser();
@@ -90,6 +93,19 @@ public class myListPage extends javax.swing.JFrame {
             JLabel title = new JLabel(movie.getTitle());
             title.setFont(new Font("Segoe UI", Font.BOLD, 16));
             infoPanel.add(title);
+
+            row.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    selectedMovie = movie;
+                }
+            });
+            row.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    selectedMovie = movie;
+                }
+            });
+
+
 
 // load poster image
             try {
@@ -142,21 +158,32 @@ public class myListPage extends javax.swing.JFrame {
 
         jButton2.setText("delete");
         jButton2.addActionListener(evt -> {
-            if (Session.getCurrentUser() == null) {
-                JOptionPane.showMessageDialog(this, "Please log in first.");
+            if (selectedMovie == null) {
+                JOptionPane.showMessageDialog(this, "Select a movie first.");
                 return;
             }
 
             int confirm = JOptionPane.showConfirmDialog(
                     this,
-                    "Are you sure you want to delete this item?",
+                    "Delete \"" + selectedMovie.getTitle() + "\" from your list?",
                     "Confirm Delete",
                     JOptionPane.YES_NO_OPTION
             );
 
             if (confirm == JOptionPane.YES_OPTION) {
-                JOptionPane.showMessageDialog(this, "Item removed from your list.");
+                boolean deleted = WatchlistDAO.removeFromWatchlist(
+                        Session.getCurrentUser().getUserID(),
+                        selectedMovie.getMovieId()
+                );
+
+                if (deleted) {
+                    JOptionPane.showMessageDialog(this, "Deleted successfully.");
+                    setupDynamicMovieList(); // refresh UI
+                } else {
+                    JOptionPane.showMessageDialog(this, "Delete failed.");
+                }
             }
+
         });
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 410, 120, 30));
 
