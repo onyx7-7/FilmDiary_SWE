@@ -56,4 +56,15 @@ public class MovieApiService {
 
         return movies;
     }
+    public static List<Movie> searchMovies(String query) {
+        List<Movie> results = new ArrayList<>();
+
+        for (Movie movie : fetchPopularMovies()) {
+            if (movie.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                results.add(movie);
+            }
+        }
+        return results;
+    }
+
 }

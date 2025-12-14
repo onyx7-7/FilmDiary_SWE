@@ -156,33 +156,48 @@ public class detailsPage extends javax.swing.JFrame {
 
     private void rateMovie() {
 
-        User user = Session.getCurrentUser();
-        if (user == null) {
-            JOptionPane.showMessageDialog(this, "Please log in first.");
-            return;
-        }
-
-        String input = JOptionPane.showInputDialog(
-                this,
-                "Enter rating (0–10):"
-        );
-
-        if (input == null) return;
-
-        try {
-            int rating = Integer.parseInt(input);
-            if (rating < 0 || rating > 10) {
-                JOptionPane.showMessageDialog(this, "Rating must be 0–10");
+            User user = Session.getCurrentUser();
+            if (user == null) {
+                JOptionPane.showMessageDialog(this, "Please log in first.");
                 return;
             }
 
-            RatingDAO.saveRating(user.getUserID(), movie.getMovieId(), rating);
-            JOptionPane.showMessageDialog(this, "Rating saved!");
+            if (!WatchlistDAO.isMovieInWatchlist(user.getUserID(), movie.getMovieId())) {
+                JOptionPane.showMessageDialog(this,
+                        "You must add this movie to your list before rating it.");
+                return;
+            }
 
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Invalid number");
+            String input = JOptionPane.showInputDialog(
+                    this,
+                    "Enter rating (0–10):",
+                    "Rate Movie",
+                    JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (input != null) {
+                try {
+                    int rating = Integer.parseInt(input);
+                    if (rating < 0 || rating > 10) {
+                        JOptionPane.showMessageDialog(this, "Rating must be 0–10");
+                        return;
+                    }
+
+                    RatingDAO.saveRating(
+                            user.getUserID(),
+                            movie.getMovieId(),
+                            rating
+                    );
+
+                    JOptionPane.showMessageDialog(this, "Rating saved!");
+
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this, "Invalid number");
+                }
+            }
         }
-    }
+
+
 
 
     // ================== VARIABLES ==================

@@ -143,6 +143,29 @@ public class homePage extends javax.swing.JFrame {
         jScrollPane2.revalidate();
         jScrollPane2.repaint();
     }
+    private void searchMovies(String query) {
+        JPanel moviePanel = new JPanel(new GridLayout(0, 4, 10, 10));
+        moviePanel.setBackground(new Color(0, 0, 0, 0));
+
+        for (Movie movie : MovieApiService.searchMovies(query)) {
+            MovieCard card = new MovieCard(movie);
+
+            card.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    selectedMovie = movie;
+                    JOptionPane.showMessageDialog(
+                            homePage.this,
+                            "Selected: " + movie.getTitle()
+                    );
+                }
+            });
+
+            moviePanel.add(card);
+        }
+
+        jScrollPane1.setViewportView(moviePanel);
+    }
+
 
 
     /**
@@ -350,9 +373,30 @@ public class homePage extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        String searchText = jTextField1.getText();
-        JOptionPane.showMessageDialog(null, "Searching for: " + searchText);
-        // TODO add your handling code here:
+        String query = jTextField1.getText().trim();
+
+        if (query.isEmpty()) {
+            loadPopularMovies();
+            return;
+        }
+
+        selectedMovie = null; // reset selection
+
+        JPanel moviePanel = new JPanel(new GridLayout(0, 4, 10, 10));
+
+        for (Movie movie : MovieApiService.fetchPopularMovies()) {
+            if (movie.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                MovieCard card = new MovieCard(movie);
+                card.addMouseListener(new java.awt.event.MouseAdapter() {
+                    public void mouseClicked(java.awt.event.MouseEvent evt) {
+                        selectedMovie = movie;
+                    }
+                });
+                moviePanel.add(card);
+            }
+        }
+
+        jScrollPane1.setViewportView(moviePanel);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**

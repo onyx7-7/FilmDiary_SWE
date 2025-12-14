@@ -94,4 +94,19 @@ public class WatchlistDAO {
 
         return movies;
     }
+    public static boolean isMovieInWatchlist(int userId, int movieId) {
+        String sql = "SELECT 1 FROM watchlist WHERE userID = ? AND mediaID = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            ps.setInt(2, movieId);
+            return ps.executeQuery().next();
+
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
 }
