@@ -220,6 +220,17 @@ public class singinPage extends javax.swing.JFrame {
                     "Input Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        // Email format validation
+        if (!isValidEmail(email)) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please enter a valid email address!",
+                    "Input Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+
 
         // Check password match BEFORE trying to register
         if (!password.equals(confirmPass)) {
@@ -254,6 +265,10 @@ public class singinPage extends javax.swing.JFrame {
         }
         // ← REMOVED: All the old unreachable code
     }//GEN-LAST:event_jButton1ActionPerformed
+    private boolean isValidEmail(String email) {
+        return email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+    }
+
 
     /**
      * @param args the command line arguments
