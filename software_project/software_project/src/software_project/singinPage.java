@@ -242,10 +242,23 @@ public class singinPage extends javax.swing.JFrame {
         // Validate and parse age
         int age;
         try {
-            age = Integer.parseInt(ageText);  // ← FIXED: Now uses ageText
+            age = Integer.parseInt(ageText);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Please enter a valid age.",
-                    "Input Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Please enter a valid numeric age.",
+                    "Input Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+// 🔒 Realistic age check
+        if (age < 10 || age > 80) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Please enter a realistic age (10–120).",
+                    "Input Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
             return;
         }
 
