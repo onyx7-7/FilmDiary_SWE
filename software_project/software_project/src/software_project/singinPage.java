@@ -255,7 +255,7 @@ public class singinPage extends javax.swing.JFrame {
         if (age < 10 || age > 80) {
             JOptionPane.showMessageDialog(
                     this,
-                    "Please enter a realistic age (10–120).",
+                    "Please enter a realistic age (10–80).",
                     "Input Error",
                     JOptionPane.ERROR_MESSAGE
             );
